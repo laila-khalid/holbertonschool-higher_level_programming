@@ -8,4 +8,4 @@ def max_integer(my_list=[]):
         if i > max_val:
             max_val = i
             
-    return max_val:wq
+    return max_vaq
