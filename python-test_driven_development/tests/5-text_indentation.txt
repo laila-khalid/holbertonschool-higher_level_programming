@@ -1,0 +1,32 @@
+=============================
+How to Use 5-text_indentation
+=============================
+
+Import the function:
+    >>> text_indentation = __import__('5-text_indentation').text_indentation
+
+Test normal indentation:
+    >>> text_indentation("Hello.How are you?Fine:Good.")
+    Hello.
+    <BLANKLINE>
+    How are you?
+    <BLANKLINE>
+    Fine:
+    <BLANKLINE>
+    Good.
+    <BLANKLINE>
+
+Test invalid type:
+    >>> text_indentation(123)
+    Traceback (most recent call last):
+        ...
+    TypeError: text must be a string
+
+Test extra spaces:
+    >>> text_indentation("Test.  Test?  Test:  ")
+    Test.
+    <BLANKLINE>
+    Test?
+    <BLANKLINE>
+    Test:
+    <BLANKLINE>
