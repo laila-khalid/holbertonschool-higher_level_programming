@@ -55,3 +55,27 @@ Test empty matrix or empty rows:
     Traceback (most recent call last):
         ...
     TypeError: matrix must be a matrix (list of lists) of integers/floats
+
+Test division by infinity:
+    >>> matrix_divided([[1, 2, 3], [4, 5, 6]], float('inf'))
+    [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
+
+Test matrix with infinity and NaN divided by integer:
+    >>> matrix_divided([[1, float('inf')], [float('nan'), 4]], 2)
+    [[0.5, inf], [nan, 2.0]]
+
+Test matrix with infinity divided by infinity:
+    >>> matrix_divided([[1, float('inf')], [3, 4]], float('inf'))
+    [[0.0, nan], [0.0, 0.0]]
+
+Test missing one argument:
+    >>> matrix_divided([[1, 2, 3]])
+    Traceback (most recent call last):
+        ...
+    TypeError: matrix_divided() missing 1 required positional argument: 'div'
+
+Test missing two arguments:
+    >>> matrix_divided()
+    Traceback (most recent call last):
+        ...
+    TypeError: matrix_divided() missing 2 required positional arguments: 'matrix' and 'div'
