@@ -1,8 +1,5 @@
 #!/usr/bin/python3
-"""
-Module 3-square
-Defines a class Square with a private size attribute and an area method.
-"""
+"""Module 3-square"""
 
 
 class Square:
@@ -15,7 +12,7 @@ class Square:
         Args:
             size (int): The size of the new square.
         """
-        if type(size) is not int:
+        if not isinstance(size, int):
             raise TypeError("size must be an integer")
         if size < 0:
             raise ValueError("size must be >= 0")
