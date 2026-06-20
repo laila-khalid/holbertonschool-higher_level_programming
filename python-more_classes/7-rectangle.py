@@ -14,12 +14,7 @@ class Rectangle:
     print_symbol = "#"
 
     def __init__(self, width=0, height=0):
-        """Initialize a new Rectangle.
-
-        Args:
-            width (int): The width of the new rectangle.
-            height (int): The height of the new rectangle.
-        """
+        """Initialize a new Rectangle."""
         self.width = width
         self.height = height
         Rectangle.number_of_instances += 1
@@ -63,19 +58,14 @@ class Rectangle:
         return (self.__width * 2) + (self.__height * 2)
 
     def __str__(self):
-        """Return the printable representation of the rectangle.
-
-        Represents the rectangle with the print_symbol attribute.
-        """
+        """Return the printable representation of the rectangle."""
         if self.__width == 0 or self.__height == 0:
             return ""
-        return "\n".join([str(self.print_symbol) * self.__width] * self.__height)
+        row = str(self.print_symbol) * self.__width
+        return "\n".join([row] * self.__height)
 
     def __repr__(self):
-        """Return the string representation of the rectangle.
-
-        Returns a string that can be used by eval() to recreate the object.
-        """
+        """Return the string representation of the rectangle."""
         return "Rectangle({:d}, {:d})".format(self.__width, self.__height)
 
     def __del__(self):
