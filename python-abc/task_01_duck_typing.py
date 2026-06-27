@@ -23,7 +23,6 @@ class Circle(Shape):
 
     def __init__(self, radius):
         """Initialize the circle with a radius."""
-        super().__init__()
         self.radius = radius
 
     def area(self):
@@ -40,7 +39,6 @@ class Rectangle(Shape):
 
     def __init__(self, width, height):
         """Initialize the rectangle with width and height."""
-        super().__init__()
         self.width = width
         self.height = height
 
@@ -55,5 +53,6 @@ class Rectangle(Shape):
 
 def shape_info(shape):
     """Print the area and perimeter of a shape object using duck typing."""
+    # Relying purely on duck typing: call methods directly
     print("Area: {}".format(shape.area()))
     print("Perimeter: {}".format(shape.perimeter()))
