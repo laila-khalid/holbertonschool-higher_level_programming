@@ -5,26 +5,59 @@ How to use 7-base_geometry.py
 >>> BaseGeometry = __import__('7-base_geometry').BaseGeometry
 >>> bg = BaseGeometry()
 
->>> bg.integer_validator("my_int", 12)
-
->>> bg.integer_validator("width", 89)
-
->>> bg.integer_validator("name", "John")
+Test area():
+>>> bg.area()
 Traceback (most recent call last):
 ...
-TypeError: name must be an integer
+Exception: area() is not implemented
 
+Test valid integer:
+>>> bg.integer_validator("age", 1)
+
+Test integer with 0:
 >>> bg.integer_validator("age", 0)
 Traceback (most recent call last):
 ...
 ValueError: age must be greater than 0
 
->>> bg.integer_validator("distance", -4)
+Test negative integer:
+>>> bg.integer_validator("age", -4)
 Traceback (most recent call last):
 ...
-ValueError: distance must be greater than 0
+ValueError: age must be greater than 0
 
->>> bg.integer_validator("is_bool", True)
+Test with string:
+>>> bg.integer_validator("age", "4")
 Traceback (most recent call last):
 ...
-TypeError: is_bool must be an integer
+TypeError: age must be an integer
+
+Test with tuple:
+>>> bg.integer_validator("age", (4,))
+Traceback (most recent call last):
+...
+TypeError: age must be an integer
+
+Test with list:
+>>> bg.integer_validator("age", [3])
+Traceback (most recent call last):
+...
+TypeError: age must be an integer
+
+Test with boolean:
+>>> bg.integer_validator("age", True)
+Traceback (most recent call last):
+...
+TypeError: age must be an integer
+
+Test with set:
+>>> bg.integer_validator("age", {3, 4})
+Traceback (most recent call last):
+...
+TypeError: age must be an integer
+
+Test with None:
+>>> bg.integer_validator("age", None)
+Traceback (most recent call last):
+...
+TypeError: age must be an integer
