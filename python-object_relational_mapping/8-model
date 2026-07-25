@@ -1,0 +1,199 @@
+
+
+# Task 4
+cat > 4-cities_by_state.py << 'EOF'
+#!/usr/bin/python3
+"""Lists all cities from the database"""
+import sys
+import MySQLdb
+
+if __name__ == "__main__":
+    db = MySQLdb.connect(host="localhost", port=3306, user=sys.argv[1],
+                         passwd=sys.argv[2], db=sys.argv[3])
+    cursor = db.cursor()
+    cursor.execute(
+        "SELECT cities.id, cities.name, states.name "
+        "FROM cities JOIN states ON cities.state_id = states.id "
+        "ORDER BY cities.id ASC"
+    )
+    for row in cursor.fetchall():
+        print(row)
+    cursor.close()
+    db.close()
+EOF
+
+# Task 5
+cat > 5-filter_cities.py << 'EOF'
+#!/usr/bin/python3
+"""All cities by state"""
+import sys
+import MySQLdb
+
+if __name__ == "__main__":
+    db = MySQLdb.connect(host="localhost", port=3306, user=sys.argv[1],
+                         passwd=sys.argv[2], db=sys.argv[3])
+    cursor = db.cursor()
+    cursor.execute(
+        "SELECT cities.name FROM cities "
+        "JOIN states ON cities.state_id = states.id "
+        "WHERE states.name = %s ORDER BY cities.id ASC",
+        (sys.argv[4],)
+    )
+    print(", ".join([row[0] for row in cursor.fetchall()]))
+    cursor.close()
+    db.close()
+EOF
+
+# Task 8
+cat > 8-model_state_fetch_first.py << 'EOF'
+#!/usr/bin/python3
+"""Prints the first State object from the database"""
+import sys
+from model_state import Base, State
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    state = session.query(State).order_by(State.id).first()
+    if state:
+        print("{}: {}".format(state.id, state.name))
+    else:
+        print("Nothing")
+    session.close()
+EOF
+
+# Task 9
+cat > 9-model_state_filter_a.py << 'EOF'
+#!/usr/bin/python3
+"""Lists all State objects that contain the letter a"""
+import sys
+from model_state import Base, State
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    states = session.query(State).filter(
+        State.name.like('%a%')).order_by(State.id).all()
+    for state in states:
+        print("{}: {}".format(state.id, state.name))
+    session.close()
+EOF
+
+# Task 10
+cat > 10-model_state_my_get.py << 'EOF'
+#!/usr/bin/python3
+"""Prints the State object with the name passed as argument"""
+import sys
+from model_state import Base, State
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    state = session.query(State).filter(State.name == sys.argv[4]).first()
+    if state:
+        print("{}".format(state.id))
+    else:
+        print("Not found")
+    session.close()
+EOF
+
+# Task 11
+cat > 11-model_state_insert.py << 'EOF'
+#!/usr/bin/python3
+"""Adds the State object Louisiana to the database"""
+import sys
+from model_state import Base, State
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    new_state = State(name="Louisiana")
+    session.add(new_state)
+    session.commit()
+    print(new_state.id)
+    session.close()
+EOF
+
+# Task 12
+cat > 12-model_state_update_id_2.py << 'EOF'
+#!/usr/bin/python3
+"""Changes the name of a State object from the database"""
+import sys
+from model_state import Base, State
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    state = session.query(State).filter(State.id == 2).first()
+    if state:
+        state.name = "New Mexico"
+        session.commit()
+    session.close()
+EOF
+
+# Task 13
+cat > 13-model_state_delete_a.py << 'EOF'
+#!/usr/bin/python3
+"""Deletes all State objects with a name containing the letter a"""
+import sys
+from model_state import Base, State
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    states = session.query(State).filter(State.name.like('%a%')).all()
+    for state in states:
+        session.delete(state)
+    session.commit()
+    session.close()
+EOF
+
+# Task 14
+cat > 14-model_city_fetch_by_state.py << 'EOF'
+#!/usr/bin/python3
+"""Prints all City objects from the database"""
+import sys
+from model_state import Base, State
+from model_city import City
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+if __name__ == "__main__":
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    for state, city in session.query(State, City).filter(
+            State.id == City.state_id).order_by(City.id).all():
+        print("{}: ({}) {}".format(state.name, city.id, city.name))
+    session.close()
+EOF
+
+# Set execution permissions and push to GitHub
+chmod +x *.py
+git add .
+git commit -m "Fix syntax for strict ALX checker regex logic on sys.argv"
