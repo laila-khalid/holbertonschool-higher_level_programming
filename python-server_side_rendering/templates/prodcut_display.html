@@ -4,16 +4,12 @@
     <title>Products</title>
 </head>
 <body>
-    <header>
-        <h1>My Flask App</h1>
-    </header>
-
     <h1>Products</h1>
-
+    
     {% if error %}
         <p>{{ error }}</p>
-    {% elif products %}
-        <table border="1">
+    {% else %}
+        <table>
             <thead>
                 <tr>
                     <th>Name</th>
@@ -31,12 +27,6 @@
                 {% endfor %}
             </tbody>
         </table>
-    {% else %}
-        <p>No products available.</p>
     {% endif %}
-
-    <footer>
-        <p>&copy; 2024 My Flask App</p>
-    </footer>
 </body>
 </html>

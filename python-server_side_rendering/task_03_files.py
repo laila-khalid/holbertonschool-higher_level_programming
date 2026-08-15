@@ -4,35 +4,29 @@ import csv
 
 app = Flask(__name__)
 
-def read_json_data():
-    with open('products.json', 'r') as f:
-        return json.load(f)
-
-def read_csv_data():
-    data = []
-    with open('products.csv', 'r') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            row['id'] = int(row['id'])
-            row['price'] = float(row['price'])
-            data.append(row)
-    return data
-
 @app.route('/products')
 def products():
     source = request.args.get('source')
     product_id = request.args.get('id')
-    
+
     if source not in ['json', 'csv']:
         return render_template('product_display.html', error="Wrong source")
+
+    data = []
     
     try:
         if source == 'json':
-            data = read_json_data()
+            with open('products.json', 'r') as f:
+                data = json.load(f)
         elif source == 'csv':
-            data = read_csv_data()
+            with open('products.csv', 'r') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    row['id'] = int(row['id'])
+                    row['price'] = float(row['price'])
+                    data.append(row)
     except Exception:
-        data = []
+        pass 
 
     if product_id:
         try:
@@ -42,9 +36,8 @@ def products():
                 return render_template('product_display.html', error="Product not found")
         except ValueError:
             return render_template('product_display.html', error="Product not found")
-    
+
     return render_template('product_display.html', products=data)
 
 if __name__ == '__main__':
-    app.run(port=5000)
-    
+    app.run(debug=True, port=5000)
